@@ -37,6 +37,18 @@
 #       results_dic dictionary that is passed into the function is a mutable 
 #       data type so no return is needed.
 # 
+
+def get_dog_names(dogfile):
+    dognames_dic = dict()
+
+    with open(dogfile, "r") as infile:
+        line = infile.readline()
+
+        while line != "":
+            dognames_dic[line.strip()] = 1
+            line = infile.readline()
+    return dognames_dic
+
 def adjust_results4_isadog(results_dic, dogfile):
     """
     Adjusts the results dictionary to determine if classifier correctly 
@@ -67,4 +79,13 @@ def adjust_results4_isadog(results_dic, dogfile):
     Returns:
            None - results_dic is mutable data type so no return needed.
     """           
+    dognames_dic = get_dog_names(dogfile)
+
+    for key in results_dic:
+        pet_label = results_dic[key][0]
+        image_classification = results_dic[key][1]
+        label_is_found = 1 if pet_label in dognames_dic else 0
+        classification_is_found = 1 if image_classification in dognames_dic else 0
+
+        results_dic[key].extend([label_is_found, classification_is_found])
     None
